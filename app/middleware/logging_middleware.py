@@ -1,0 +1,10 @@
+import logging
+from starlette.middleware.base import BaseHTTPMiddleware
+
+# Middleware to log incoming requests and outgoing responses
+class LoggingMiddleware(BaseHTTPMiddleware):
+    async def dispatch(self, request, call_next):
+        logging.info(f'Incoming request: {request.method} {request.url}')
+        response = await call_next(request)
+        logging.info(f'Response status: {response.status_code}')
+        return response
