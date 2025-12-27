@@ -1,0 +1,11 @@
+services:
+  - type: web
+    name: car-price-prediction-api
+    env: docker
+    plan: free
+    branch: main
+    autoDeploy: true
+    dockerfilePath: ./Dockerfile
+    envVars:
+      - key: MODEL_PATH
+        value: app/models/prediction_model.joblib

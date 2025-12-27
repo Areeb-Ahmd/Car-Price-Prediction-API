@@ -1,17 +1,16 @@
-import json
-import redis 
-from app.core.config import settings
+import os
+import redis
+from dotenv import load_dotenv
 
-# Setup redis client
-redis_client = redis.Redis.from_url(settings.REDIS_URL)
+load_dotenv()
 
-# Function to return prediction from cache memory
+REDIS_URL = os.getenv("REDIS_URL")
+
+redis_client = redis.StrictRedis.from_url(REDIS_URL, decode_responses=True)
+
 def get_cached_prediction(key: str):
     value = redis_client.get(key)
-    if value:
-        return json.loads(value)
-    return None
+    return eval(value) if value else None
 
-#Set the value in cache
-def set_cached_prediction(key: str, value: dict, expiry: int = 3600):
-    redis_client.setex(key, expiry, json.dumps(value))
+def set_cached_prediction(key: str, value: dict):
+    redis_client.set(key, str(value))
