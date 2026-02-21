@@ -101,6 +101,15 @@ uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
 
 ---
 
+## 🔐 Authentication Headers (Important)
+
+This API secures the `/predict` endpoint with **two required headers**:
+
+- **JWT**: pass the JWT access token in a header named `token`
+- **API Key**: pass the API key in a header named `api-key`
+
+Note: the implementation currently expects these exact header names (it does **not** use `Authorization: Bearer ...` or `X-API-Key`).
+
 ## 🧪 Example API Usage
 
 ### 1. Login to Get Access Token
@@ -123,8 +132,8 @@ curl -X POST "http://localhost:8000/login" \
 ### 2. Predict Car Price
 ```bash
 curl -X POST "http://localhost:8000/predict" \
-  -H "Authorization: Bearer <your_access_token>" \
-  -H "X-API-Key: demo-key" \
+  -H "token: <your_access_token>" \
+  -H "api-key: demo-key" \
   -H "Content-Type: application/json" \
   -d '{
     "company": "Maruti",
